@@ -2,8 +2,6 @@ import com.lowagie.text.DocumentException;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class TestFlyingSaucer {
