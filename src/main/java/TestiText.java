@@ -86,4 +86,5 @@ public class TestiText {
         System.out.println("TPS:" + ((double) loop/duration*1000));
         System.out.println("latency:" + ((double) duration/loop));
     }
+
 }
