@@ -1,6 +1,5 @@
 
 import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -19,35 +18,32 @@ import com.itextpdf.tool.xml.pipeline.html.HtmlPipelineContext;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.concurrent.CountDownLatch;
 
-public class TestiText {
+public class ITextWorker extends BaseWorker {
 
     private static final ElementList elements = parseHtml(HTMLUtil.getLongContent(), Tags.getHtmlTagProcessorFactory());
 
-    public void createPdf() throws IOException, DocumentException {
-        System.out.println();
-        long t1 = System.currentTimeMillis();
-        // step 1
-        Document document = new Document(new Rectangle(595.32F, 841.92F), 90.0F, 32.7F, 160.4F, 50.7F);
-        System.out.println(System.currentTimeMillis() - t1);
-        // step 2
-        PdfWriter writer = PdfWriter.getInstance(document, new ByteArrayOutputStream());
-        // PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(result));
-        // step 3
-        document.open();
-        System.out.println(System.currentTimeMillis() - t1);
-        t1 = System.currentTimeMillis();
-        // step 4
-        for (Element e : elements) {
-            document.add(e);
-        }
-        // step 5
-        System.out.println(System.currentTimeMillis() - t1);
-        document.close();
-        writer.close();
+    public ITextWorker(int loop, CountDownLatch latch) {
+        super(loop, latch);
     }
 
-    public static ElementList parseHtml(String content, TagProcessorFactory tagProcessors) {
+    public void doTest() {
+        try {
+            Document document = new Document(new Rectangle(595.32F, 841.92F), 90.0F, 32.7F, 160.4F, 50.7F);
+            PdfWriter writer = PdfWriter.getInstance(document, new ByteArrayOutputStream());
+            document.open();
+            for (Element e : elements) {
+                document.add(e);
+            }
+            document.close();
+            writer.close();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static ElementList parseHtml(String content, TagProcessorFactory tagProcessors) {
         // CSS
         CSSResolver cssResolver = new StyleAttrCSSResolver();
         // CssFile cssFile = XMLWorkerHelper.getCSS(new FileInputStream(""));
@@ -71,20 +67,6 @@ public class TestiText {
             throw new Error(e);
         }
         return elements;
-    }
-
-    public static void main(String[] args) throws IOException, DocumentException {
-        int loop = 100;
-        long t1 = System.currentTimeMillis();
-        for (int i  = 0; i < loop; i++) {
-            System.out.println("loop " + i);
-            new TestiText().createPdf();
-        }
-        long duration = System.currentTimeMillis() - t1;
-        System.out.println();
-        System.out.println("time:" + duration);
-        System.out.println("TPS:" + ((double) loop/duration*1000));
-        System.out.println("latency:" + ((double) duration/loop));
     }
 
 }
