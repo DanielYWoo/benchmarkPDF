@@ -1,3 +1,4 @@
+import java.io.File;
 import java.util.concurrent.CountDownLatch;
 
 public class Runner {
@@ -35,7 +36,7 @@ public class Runner {
     public void run() throws InterruptedException {
         System.out.println();
         System.out.println(this.clazz.getSimpleName());
-        System.out.println("Run " + loops + " times with " + threads + " threads");
+        System.out.println("Run " + (loops * threads) + " times with " + threads + " threads");
         long t1 = System.currentTimeMillis();
         for (BaseWorker worker : workers) {
             worker.run();
@@ -54,11 +55,12 @@ public class Runner {
     public static void main(String[] args) throws Exception {
         // warm up
         System.out.println("================== Warm up ===========================");
-        new ITextHTMLWorker(1, null).doTest(null);
-        new ITextLayoutWorker(1, null).doTest(null);
-        new PDFBoxWorker(1, null).doTest(null);
-        new PDFBoxLayoutWorker(1, null).doTest(null);
-        new FlyingSaucerWorker(1, null).doTest(null);
+        new File("target").mkdir();
+        new ITextHTMLWorker(1, null).doTest("target/itext_html.pdf");
+        new ITextLayoutWorker(1, null).doTest("target/itext_layout.pdf");
+        new PDFBoxWorker(1, null).doTest("target/pdfbox.pdf");
+        new PDFBoxLayoutWorker(1, null).doTest("target/pdfbox_layout.pdf");
+        new FlyingSaucerWorker(1, null).doTest("target/flying_saucer.pdf");
 
 
         for (int threads = 1; threads < 32; threads *= 2) {
