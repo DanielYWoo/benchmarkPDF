@@ -1,5 +1,4 @@
 import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.ElementList;
 import com.itextpdf.tool.xml.XMLWorker;
@@ -19,15 +18,15 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.concurrent.CountDownLatch;
 
-public class ITextHTMLWorker extends BaseWorker {
+public class IText5HTMLWorker extends BaseWorker {
 
     private static final ElementList elements = parseHtml(HTMLUtil.getLongContent(), Tags.getHtmlTagProcessorFactory());
 
-    public ITextHTMLWorker(int loop, CountDownLatch latch) {
+    public IText5HTMLWorker(int loop, CountDownLatch latch) {
         super(loop, latch);
     }
     static {
-        FontFactory.registerDirectory(ITextHTMLWorker.class.getClassLoader().getResource("fonts").getPath());
+        FontFactory.registerDirectory(IText5HTMLWorker.class.getClassLoader().getResource("fonts").getPath());
     }
 
     public void doTest(String optionalPath) throws Exception {
@@ -74,7 +73,7 @@ public class ITextHTMLWorker extends BaseWorker {
     }
 
     public static void main(String[] args) throws Exception {
-        new ITextHTMLWorker(1, null).doTest("target/test_itext_from_html.pdf");
+        new IText5HTMLWorker(1, null).doTest("target/test_itext_from_html.pdf");
     }
 
 }
