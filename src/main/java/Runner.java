@@ -89,9 +89,9 @@ public class Runner {
         for (int threads = 1; threads <= 64; threads *= 2) {
             // start
             System.out.println("================== Test with " + threads + " threads ==================");
-            throughput.get(IText5HTMLWorker.class).add( new Runner(IText5HTMLWorker.class, 1024 / threads, threads).run());
-            throughput.get(IText2HTMLWorker.class).add( new Runner(IText2HTMLWorker.class, 1024 / threads, threads).run());
-            throughput.get(IText5LayoutWorker.class).add(new Runner(IText5LayoutWorker.class, 1024 / threads, threads).run());
+            throughput.get(IText5HTMLWorker.class).add( new Runner(IText5HTMLWorker.class, 512 / threads, threads).run());
+            throughput.get(IText2HTMLWorker.class).add( new Runner(IText2HTMLWorker.class, 512 / threads, threads).run());
+            throughput.get(IText5LayoutWorker.class).add(new Runner(IText5LayoutWorker.class, 512 / threads, threads).run());
 //            throughput.get(PDFBoxWorker.class).add(new Runner(PDFBoxWorker.class, 1024 / threads, threads).run());
 //            throughput.get(PDFBoxLayoutWorker.class).add(new Runner(PDFBoxLayoutWorker.class, 10, threads).run()); // too slow
             throughput.get(IText7HTMLWorker.class).add( new Runner(IText7HTMLWorker.class, 100 / threads, threads).run()); // too slow

@@ -11,9 +11,8 @@ import org.jsoup.nodes.Element;
 
 public class HTMLUtil {
 
-    private static List<String> elements;
-    private static String html;
-
+    private static final List<String> elements;
+    private static final String html;
     static {
         URL sample = HTMLUtil.class.getClassLoader().getResource("sample.html");
         StringBuilder contentBuilder = new StringBuilder();

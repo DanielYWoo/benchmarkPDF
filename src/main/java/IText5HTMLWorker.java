@@ -20,7 +20,6 @@ import java.util.concurrent.CountDownLatch;
 
 public class IText5HTMLWorker extends BaseWorker {
 
-    private static final ElementList elements = parseHtml(HTMLUtil.getLongContent(), Tags.getHtmlTagProcessorFactory());
 
     public IText5HTMLWorker(int loop, CountDownLatch latch) {
         super(loop, latch);
@@ -30,8 +29,7 @@ public class IText5HTMLWorker extends BaseWorker {
     }
 
     public void doTest(String optionalPath) throws Exception {
-
-        Document document = new Document(new Rectangle(595.32F, 841.92F), 90.0F, 32.7F, 160.4F, 50.7F);
+        Document document = new Document(PageSize.A4, 30.0F, 30.0F, 60.0F, 60.0F);
         PdfWriter writer;
         if (optionalPath != null) {
             writer = PdfWriter.getInstance(document, new BufferedOutputStream(new FileOutputStream(optionalPath)));
@@ -39,6 +37,8 @@ public class IText5HTMLWorker extends BaseWorker {
             writer = PdfWriter.getInstance(document, new ByteArrayOutputStream());
         }
         document.open();
+
+        ElementList elements = parseHtml(HTMLUtil.getLongContent(), Tags.getHtmlTagProcessorFactory());
         for (Element e : elements) {
             document.add(e);
         }
@@ -46,7 +46,7 @@ public class IText5HTMLWorker extends BaseWorker {
         writer.close();
     }
 
-    private static ElementList parseHtml(String content, TagProcessorFactory tagProcessors) {
+    private ElementList parseHtml(String content, TagProcessorFactory tagProcessors) throws IOException {
         // CSS
         CSSResolver cssResolver = new StyleAttrCSSResolver();
         // CssFile cssFile = XMLWorkerHelper.getCSS(new FileInputStream(""));
@@ -63,12 +63,7 @@ public class IText5HTMLWorker extends BaseWorker {
         // XML Worker
         XMLWorker worker = new XMLWorker(css, true);
         XMLParser p = new XMLParser(worker);
-
-        try {
-            p.parse(new StringReader(content));
-        } catch (IOException e) {
-            throw new Error(e);
-        }
+        p.parse(new StringReader(content));
         return elements;
     }
 
