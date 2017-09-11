@@ -79,19 +79,19 @@ public class Runner {
         throughput.put(PDFBoxLayoutWorker.class, new ArrayList<>());
         throughput.put(FlyingSaucerWorker.class, new ArrayList<>());
 
-        for (int threads = 1; threads < 128; threads *= 2) {
+        for (int threads = 1; threads <= 64; threads *= 2) {
             // start
             System.out.println("================== Test with " + threads + " threads ==================");
-            throughput.get(ITextHTMLWorker.class).add( new Runner(ITextHTMLWorker.class, 64 / threads, threads).run());
-            throughput.get(ITextLayoutWorker.class).add(new Runner(ITextLayoutWorker.class, 64 / threads, threads).run());
-            throughput.get(PDFBoxWorker.class).add(new Runner(PDFBoxWorker.class, 64 / threads, threads).run());
-            throughput.get(PDFBoxLayoutWorker.class).add(new Runner(PDFBoxLayoutWorker.class, 3, threads).run()); // too slow, just loop 3 times
-            throughput.get(FlyingSaucerWorker.class).add(new Runner(FlyingSaucerWorker.class, 3, threads).run()); // too slow, just loop 3 times
+            throughput.get(ITextHTMLWorker.class).add( new Runner(ITextHTMLWorker.class, 1024 / threads, threads).run());
+            throughput.get(ITextLayoutWorker.class).add(new Runner(ITextLayoutWorker.class, 1024 / threads, threads).run());
+            throughput.get(PDFBoxWorker.class).add(new Runner(PDFBoxWorker.class, 1024 / threads, threads).run());
+            throughput.get(PDFBoxLayoutWorker.class).add(new Runner(PDFBoxLayoutWorker.class, 10, threads).run()); // too slow
+            throughput.get(FlyingSaucerWorker.class).add(new Runner(FlyingSaucerWorker.class, 10, threads).run()); // too slow
         }
 
         System.out.println("================== throughput summary ==================");
         for (Class clazz : throughput.keySet()) {
-            System.out.println(clazz + ":" + throughput.get(clazz));
+            System.out.println(clazz.getSimpleName() + ": " + throughput.get(clazz));
         }
 
     }
