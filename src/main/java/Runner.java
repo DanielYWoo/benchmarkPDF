@@ -36,6 +36,8 @@ public class Runner {
                 workers[i] = new PDFBoxLayoutWorker(loops, latch);
             } else if (clazz == IText7Worker.class) {
                 workers[i] = new IText7Worker(loops, latch);
+            } else if (clazz == IText2HTMLWorker.class) {
+                workers[i] = new IText2HTMLWorker(loops, latch);
             } else {
                 throw new IllegalArgumentException("Not supported worker:" + clazz);
             }
@@ -71,12 +73,14 @@ public class Runner {
         new ITextHTMLWorker(1, null).doTest("target/itext_html.pdf");
         new IText7Worker(1, null).doTest("target/itext7_html.pdf");
         new ITextLayoutWorker(1, null).doTest("target/itext_layout.pdf");
+        new IText2HTMLWorker(1, null).doTest("target/itext2_layout.pdf");
         new PDFBoxWorker(1, null).doTest("target/pdfbox.pdf");
         new PDFBoxLayoutWorker(1, null).doTest("target/pdfbox_layout.pdf");
         new FlyingSaucerWorker(1, null).doTest("target/flying_saucer.pdf");
 
         Map<Class, List<Double>> throughput = new HashMap<>();
         throughput.put(ITextHTMLWorker.class, new ArrayList<>());
+        throughput.put(IText2HTMLWorker.class, new ArrayList<>());
         throughput.put(ITextLayoutWorker.class, new ArrayList<>());
         throughput.put(PDFBoxWorker.class, new ArrayList<>());
         throughput.put(PDFBoxLayoutWorker.class, new ArrayList<>());
@@ -86,6 +90,7 @@ public class Runner {
             // start
             System.out.println("================== Test with " + threads + " threads ==================");
             throughput.get(ITextHTMLWorker.class).add( new Runner(ITextHTMLWorker.class, 1024 / threads, threads).run());
+            throughput.get(IText2HTMLWorker.class).add( new Runner(IText2HTMLWorker.class, 1024 / threads, threads).run());
             throughput.get(ITextLayoutWorker.class).add(new Runner(ITextLayoutWorker.class, 1024 / threads, threads).run());
             throughput.get(IText7Worker.class).add( new Runner(IText7Worker.class, 1024 / threads, threads).run());
             throughput.get(PDFBoxWorker.class).add(new Runner(PDFBoxWorker.class, 1024 / threads, threads).run());
