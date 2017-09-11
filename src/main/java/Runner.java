@@ -1,4 +1,7 @@
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,7 +46,7 @@ public class Runner {
         System.out.println("Run " + (loops * threads) + " times with " + threads + " threads");
         long t1 = System.currentTimeMillis();
         for (BaseWorker worker : workers) {
-            worker.run();
+            worker.start();
         }
         latch.await();
         long duration = System.currentTimeMillis() - t1;
@@ -62,6 +65,7 @@ public class Runner {
         // warm up
         System.out.println("================== Warm up ===========================");
         new File("target").mkdir();
+        generateHtmlFile("target/test.html");
         new ITextHTMLWorker(1, null).doTest("target/itext_html.pdf");
         new ITextLayoutWorker(1, null).doTest("target/itext_layout.pdf");
         new PDFBoxWorker(1, null).doTest("target/pdfbox.pdf");
@@ -75,7 +79,7 @@ public class Runner {
         throughput.put(PDFBoxLayoutWorker.class, new ArrayList<>());
         throughput.put(FlyingSaucerWorker.class, new ArrayList<>());
 
-        for (int threads = 1; threads < 64; threads *= 2) {
+        for (int threads = 1; threads < 128; threads *= 2) {
             // start
             System.out.println("================== Test with " + threads + " threads ==================");
             throughput.get(ITextHTMLWorker.class).add( new Runner(ITextHTMLWorker.class, 64 / threads, threads).run());
@@ -91,4 +95,12 @@ public class Runner {
         }
 
     }
+
+    private static void generateHtmlFile(String path) throws IOException {
+        File file = new File(path);
+        try (BufferedWriter out = new BufferedWriter(new FileWriter(file))) {
+            out.write(HTMLUtil.getLongContent());
+        }
+    }
+
 }

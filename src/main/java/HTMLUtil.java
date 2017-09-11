@@ -11,17 +11,11 @@ public class HTMLUtil {
 //            String str = "This is a 测试 asdfasdf asdf sad safd  asdf asdf sda fsad fsadf sdf ";
         StringBuilder sb = new StringBuilder();
         sb.append("<html><body>");
-        for (int i = 0; i < 35000; i++) {
+        for (int i = 0; i < 4000; i++) {
             sb.append("<p>");
-            long ts = System.currentTimeMillis();
-            elements.add(str);
-            sb.append(str);
+            sb.append(i + " " + str);
             sb.append("</p>");
-
-            sb.append("<p>");
-            elements.add("" + ts);
-            sb.append(ts);
-            sb.append("</p>");
+            elements.add(i + " " + str);
         }
         sb.append("</body></html>");
         return sb.toString();
