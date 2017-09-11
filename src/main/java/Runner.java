@@ -34,6 +34,8 @@ public class Runner {
                 workers[i] = new PDFBoxWorker(loops, latch);
             } else if (clazz == PDFBoxLayoutWorker.class) {
                 workers[i] = new PDFBoxLayoutWorker(loops, latch);
+            } else if (clazz == IText7Worker.class) {
+                workers[i] = new IText7Worker(loops, latch);
             } else {
                 throw new IllegalArgumentException("Not supported worker:" + clazz);
             }
@@ -67,6 +69,7 @@ public class Runner {
         new File("target").mkdir();
         generateHtmlFile("target/test.html");
         new ITextHTMLWorker(1, null).doTest("target/itext_html.pdf");
+        new IText7Worker(1, null).doTest("target/itext7_html.pdf");
         new ITextLayoutWorker(1, null).doTest("target/itext_layout.pdf");
         new PDFBoxWorker(1, null).doTest("target/pdfbox.pdf");
         new PDFBoxLayoutWorker(1, null).doTest("target/pdfbox_layout.pdf");
@@ -84,6 +87,7 @@ public class Runner {
             System.out.println("================== Test with " + threads + " threads ==================");
             throughput.get(ITextHTMLWorker.class).add( new Runner(ITextHTMLWorker.class, 1024 / threads, threads).run());
             throughput.get(ITextLayoutWorker.class).add(new Runner(ITextLayoutWorker.class, 1024 / threads, threads).run());
+            throughput.get(IText7Worker.class).add( new Runner(IText7Worker.class, 1024 / threads, threads).run());
             throughput.get(PDFBoxWorker.class).add(new Runner(PDFBoxWorker.class, 1024 / threads, threads).run());
             throughput.get(PDFBoxLayoutWorker.class).add(new Runner(PDFBoxLayoutWorker.class, 10, threads).run()); // too slow
             throughput.get(FlyingSaucerWorker.class).add(new Runner(FlyingSaucerWorker.class, 10, threads).run()); // too slow

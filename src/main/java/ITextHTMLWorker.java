@@ -1,6 +1,5 @@
-import com.itextpdf.text.Document;
-import com.itextpdf.text.Element;
-import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.ElementList;
 import com.itextpdf.tool.xml.XMLWorker;
@@ -27,8 +26,12 @@ public class ITextHTMLWorker extends BaseWorker {
     public ITextHTMLWorker(int loop, CountDownLatch latch) {
         super(loop, latch);
     }
+    static {
+        FontFactory.registerDirectory(ITextHTMLWorker.class.getClassLoader().getResource("fonts").getPath());
+    }
 
     public void doTest(String optionalPath) throws Exception {
+
         Document document = new Document(new Rectangle(595.32F, 841.92F), 90.0F, 32.7F, 160.4F, 50.7F);
         PdfWriter writer;
         if (optionalPath != null) {

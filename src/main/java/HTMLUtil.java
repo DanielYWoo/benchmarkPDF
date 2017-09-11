@@ -1,5 +1,11 @@
+import java.io.IOException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class HTMLUtil {
 
@@ -7,18 +13,16 @@ public class HTMLUtil {
     private static final String html = create();
 
     public static String create() {
-        String str = "This is a tset asdfasdf asdf sad safd  asdf asdf sda fsad fsadf sdf ";
-//            String str = "This is a 测试 asdfasdf asdf sad safd  asdf asdf sda fsad fsadf sdf ";
-        StringBuilder sb = new StringBuilder();
-        sb.append("<html><body>");
-        for (int i = 0; i < 4000; i++) {
-            sb.append("<p>");
-            sb.append(i + " " + str);
-            sb.append("</p>");
-            elements.add(i + " " + str);
+        URL sample = HTMLUtil.class.getClassLoader().getResource("sample.html");
+        StringBuilder contentBuilder = new StringBuilder();
+        if (sample != null) {
+            try (Stream<String> stream = Files.lines(Paths.get(sample.getPath()), StandardCharsets.UTF_8)) {
+                stream.forEach(s -> contentBuilder.append(s).append("\n"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-        sb.append("</body></html>");
-        return sb.toString();
+        return contentBuilder.toString();
     }
 
     public static List<String> getLongContentElements() {
