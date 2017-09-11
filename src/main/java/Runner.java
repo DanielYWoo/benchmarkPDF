@@ -38,6 +38,8 @@ public class Runner {
                 workers[i] = new IText7HTMLWorker(loops, latch);
             } else if (clazz == IText2HTMLWorker.class) {
                 workers[i] = new IText2HTMLWorker(loops, latch);
+            } else if (clazz == WkhtmltopdfWorker.class) {
+                workers[i] = new WkhtmltopdfWorker(loops, latch);
             } else {
                 throw new IllegalArgumentException("Not supported worker:" + clazz);
             }
@@ -71,20 +73,22 @@ public class Runner {
         new File("target").mkdir();
         generateHtmlFile("target/test.html");
         new IText5HTMLWorker(1, null).doTest("target/itext5_html.pdf");
-        new IText7HTMLWorker(1, null).doTest("target/itext7_html.pdf");
+        new WkhtmltopdfWorker(1, null).doTest("target/wk_html.pdf");
+//        new IText7HTMLWorker(1, null).doTest("target/itext7_html.pdf");
         new IText2HTMLWorker(1, null).doTest("target/itext2_layout.pdf");
         new IText5LayoutWorker(1, null).doTest("target/itext5_layout.pdf");
 //        new PDFBoxWorker(1, null).doTest("target/pdfbox.pdf");
 //        new PDFBoxLayoutWorker(1, null).doTest("target/pdfbox_layout.pdf");
-        new FlyingSaucerWorker(1, null).doTest("target/flying_saucer.pdf");
+//        new FlyingSaucerWorker(1, null).doTest("target/flying_saucer.pdf");
 
         Map<Class, List<Double>> throughput = new HashMap<>();
         throughput.put(IText5HTMLWorker.class, new ArrayList<>());
+        throughput.put(WkhtmltopdfWorker.class, new ArrayList<>());
         throughput.put(IText2HTMLWorker.class, new ArrayList<>());
         throughput.put(IText5LayoutWorker.class, new ArrayList<>());
-        throughput.put(PDFBoxWorker.class, new ArrayList<>());
-        throughput.put(PDFBoxLayoutWorker.class, new ArrayList<>());
-        throughput.put(FlyingSaucerWorker.class, new ArrayList<>());
+//        throughput.put(PDFBoxWorker.class, new ArrayList<>());
+//        throughput.put(PDFBoxLayoutWorker.class, new ArrayList<>());
+//        throughput.put(FlyingSaucerWorker.class, new ArrayList<>());
 
         for (int threads = 1; threads <= 64; threads *= 2) {
             // start
@@ -92,10 +96,11 @@ public class Runner {
             throughput.get(IText5HTMLWorker.class).add( new Runner(IText5HTMLWorker.class, 512 / threads, threads).run());
             throughput.get(IText2HTMLWorker.class).add( new Runner(IText2HTMLWorker.class, 512 / threads, threads).run());
             throughput.get(IText5LayoutWorker.class).add(new Runner(IText5LayoutWorker.class, 512 / threads, threads).run());
+            throughput.get(WkhtmltopdfWorker.class).add( new Runner(WkhtmltopdfWorker.class, 32 / threads, threads).run());
 //            throughput.get(PDFBoxWorker.class).add(new Runner(PDFBoxWorker.class, 1024 / threads, threads).run());
 //            throughput.get(PDFBoxLayoutWorker.class).add(new Runner(PDFBoxLayoutWorker.class, 10, threads).run()); // too slow
-            throughput.get(IText7HTMLWorker.class).add( new Runner(IText7HTMLWorker.class, 100 / threads, threads).run()); // too slow
-            throughput.get(FlyingSaucerWorker.class).add(new Runner(FlyingSaucerWorker.class, 10, threads).run()); // too slow
+//            throughput.get(IText7HTMLWorker.class).add( new Runner(IText7HTMLWorker.class, 100 / threads, threads).run()); // too slow
+//            throughput.get(FlyingSaucerWorker.class).add(new Runner(FlyingSaucerWorker.class, 10, threads).run()); // too slow
         }
 
         System.out.println("================== throughput summary ==================");

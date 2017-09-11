@@ -97,6 +97,12 @@
       <artifactId>pdfbox2-layout</artifactId>
       <version>1.0.0</version>
     </dependency>
+
+    <dependency>
+       <groupId>com.github.jhonnymertz</groupId>
+       <artifactId>java-wkhtmltopdf-wrapper</artifactId>
+       <version>1.0.2-RELEASE</version>
+    </dependency>
   </dependencies>
 
   <build>
