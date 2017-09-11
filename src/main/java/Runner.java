@@ -16,8 +16,10 @@ public class Runner {
         this.latch = new CountDownLatch(threads);
         this.workers = new BaseWorker[threads];
         for (int i = 0; i < threads; i++) {
-            if (clazz == ITextWorker.class) {
-                workers[i] = new ITextWorker(loops, latch);
+            if (clazz == ITextHTMLWorker.class) {
+                workers[i] = new ITextHTMLWorker(loops, latch);
+            } else if (clazz == ITextLayoutWorker.class) {
+                workers[i] = new ITextLayoutWorker(loops, latch);
             } else if (clazz == FlyingSaucerWorker.class) {
                 workers[i] = new FlyingSaucerWorker(loops, latch);
             } else if (clazz == PDFBoxWorker.class) {
@@ -42,8 +44,8 @@ public class Runner {
         long duration = System.currentTimeMillis() - t1;
         System.out.println();
         System.out.println("Duration(ms):" + duration);
-        System.out.println("TPS:" + ((double) loops / duration * 1000));
-        System.out.println("Average Latency:" + ((double) duration / loops));
+        System.out.println("TPS:" + ((double) loops * threads / duration * 1000));
+        System.out.println("Average Latency:" + ((double) duration / loops / threads));
 
         System.gc();
         Thread.sleep(2000);
@@ -52,7 +54,8 @@ public class Runner {
     public static void main(String[] args) throws Exception {
         // warm up
         System.out.println("================== Warm up ===========================");
-        new ITextWorker(1, null).doTest(null);
+        new ITextHTMLWorker(1, null).doTest(null);
+        new ITextLayoutWorker(1, null).doTest(null);
         new PDFBoxWorker(1, null).doTest(null);
         new PDFBoxLayoutWorker(1, null).doTest(null);
         new FlyingSaucerWorker(1, null).doTest(null);
@@ -61,10 +64,11 @@ public class Runner {
         for (int threads = 1; threads < 32; threads *= 2) {
             // start
             System.out.println("================== Test with " + threads + "threads ==================");
-            new Runner(ITextWorker.class, 100, threads).run();
-            new Runner(PDFBoxWorker.class, 20, threads).run();
-            new Runner(PDFBoxLayoutWorker.class, 20, threads).run(); // too slow, just loop 20 times
-            new Runner(FlyingSaucerWorker.class, 20, threads).run(); // too slow, just loop 20 times
+            new Runner(ITextHTMLWorker.class, 100 / threads, threads).run();
+            new Runner(ITextLayoutWorker.class, 100 / threads, threads).run();
+            new Runner(PDFBoxWorker.class, 100 / threads, threads).run();
+            new Runner(PDFBoxLayoutWorker.class, 3, threads).run(); // too slow, just loop 3 times
+            new Runner(FlyingSaucerWorker.class, 3, threads).run(); // too slow, just loop 3 times
         }
 
     }

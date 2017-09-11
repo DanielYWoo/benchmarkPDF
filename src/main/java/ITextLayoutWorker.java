@@ -1,5 +1,6 @@
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Element;
+import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.ElementList;
@@ -20,11 +21,9 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.concurrent.CountDownLatch;
 
-public class ITextWorker extends BaseWorker {
+public class ITextLayoutWorker extends BaseWorker {
 
-    private static final ElementList elements = parseHtml(HTMLUtil.getLongContent(), Tags.getHtmlTagProcessorFactory());
-
-    public ITextWorker(int loop, CountDownLatch latch) {
+    public ITextLayoutWorker(int loop, CountDownLatch latch) {
         super(loop, latch);
     }
 
@@ -37,41 +36,16 @@ public class ITextWorker extends BaseWorker {
             writer = PdfWriter.getInstance(document, new ByteArrayOutputStream());
         }
         document.open();
-        for (Element e : elements) {
+        for (String text : HTMLUtil.getLongContentElements()) {
+            Paragraph e = new Paragraph(text);
             document.add(e);
         }
         document.close();
         writer.close();
     }
 
-    private static ElementList parseHtml(String content, TagProcessorFactory tagProcessors) {
-        // CSS
-        CSSResolver cssResolver = new StyleAttrCSSResolver();
-        // CssFile cssFile = XMLWorkerHelper.getCSS(new FileInputStream(""));
-        // cssResolver.addCss(cssFile);
-        // HTML
-        HtmlPipelineContext htmlContext = new HtmlPipelineContext(null);
-        htmlContext.setTagFactory(tagProcessors);
-        htmlContext.autoBookmark(false);
-        // Pipelines
-        ElementList elements = new ElementList();
-        ElementHandlerPipeline end = new ElementHandlerPipeline(elements, null);
-        HtmlPipeline html = new HtmlPipeline(htmlContext, end);
-        CssResolverPipeline css = new CssResolverPipeline(cssResolver, html);
-        // XML Worker
-        XMLWorker worker = new XMLWorker(css, true);
-        XMLParser p = new XMLParser(worker);
-
-        try {
-            p.parse(new StringReader(content));
-        } catch (IOException e) {
-            throw new Error(e);
-        }
-        return elements;
-    }
-
     public static void main(String[] args) throws Exception {
-        new ITextWorker(1, null).doTest("target/test_itext.pdf");
+        new ITextLayoutWorker(1, null).doTest("target/test_itext_layout.pdf");
     }
 
 }
