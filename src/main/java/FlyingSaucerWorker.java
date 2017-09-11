@@ -7,7 +7,7 @@ import org.xhtmlrenderer.pdf.ITextRenderer;
 
 public class FlyingSaucerWorker extends BaseWorker {
 
-    private static ITextRenderer renderer = new ITextRenderer();
+    private ITextRenderer renderer = new ITextRenderer();
 
     public FlyingSaucerWorker(int loop, CountDownLatch latch) {
         super(loop, latch);
@@ -27,7 +27,4 @@ public class FlyingSaucerWorker extends BaseWorker {
         out.close();
     }
 
-    public static void main(String[] args) throws Exception {
-        new FlyingSaucerWorker(1, null).doTest("target/test_flying_saucer.pdf");
-    }
 }

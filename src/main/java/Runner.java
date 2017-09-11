@@ -1,4 +1,8 @@
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 public class Runner {
@@ -33,7 +37,7 @@ public class Runner {
         }
     }
 
-    public void run() throws InterruptedException {
+    public double run() throws InterruptedException {
         System.out.println();
         System.out.println(this.clazz.getSimpleName());
         System.out.println("Run " + (loops * threads) + " times with " + threads + " threads");
@@ -43,13 +47,15 @@ public class Runner {
         }
         latch.await();
         long duration = System.currentTimeMillis() - t1;
+        double tps = ((double) loops * threads / duration * 1000);
         System.out.println();
         System.out.println("Duration(ms):" + duration);
-        System.out.println("TPS:" + ((double) loops * threads / duration * 1000));
+        System.out.println("TPS:" + tps);
         System.out.println("Average Latency:" + ((double) duration / loops / threads));
 
         System.gc();
-        Thread.sleep(2000);
+        Thread.sleep(1000);
+        return tps;
     }
 
     public static void main(String[] args) throws Exception {
@@ -62,15 +68,26 @@ public class Runner {
         new PDFBoxLayoutWorker(1, null).doTest("target/pdfbox_layout.pdf");
         new FlyingSaucerWorker(1, null).doTest("target/flying_saucer.pdf");
 
+        Map<Class, List<Double>> throughput = new HashMap<>();
+        throughput.put(ITextHTMLWorker.class, new ArrayList<>());
+        throughput.put(ITextLayoutWorker.class, new ArrayList<>());
+        throughput.put(PDFBoxWorker.class, new ArrayList<>());
+        throughput.put(PDFBoxLayoutWorker.class, new ArrayList<>());
+        throughput.put(FlyingSaucerWorker.class, new ArrayList<>());
 
-        for (int threads = 1; threads < 32; threads *= 2) {
+        for (int threads = 1; threads < 64; threads *= 2) {
             // start
-            System.out.println("================== Test with " + threads + "threads ==================");
-            new Runner(ITextHTMLWorker.class, 100 / threads, threads).run();
-            new Runner(ITextLayoutWorker.class, 100 / threads, threads).run();
-            new Runner(PDFBoxWorker.class, 100 / threads, threads).run();
-            new Runner(PDFBoxLayoutWorker.class, 3, threads).run(); // too slow, just loop 3 times
-            new Runner(FlyingSaucerWorker.class, 3, threads).run(); // too slow, just loop 3 times
+            System.out.println("================== Test with " + threads + " threads ==================");
+            throughput.get(ITextHTMLWorker.class).add( new Runner(ITextHTMLWorker.class, 64 / threads, threads).run());
+            throughput.get(ITextLayoutWorker.class).add(new Runner(ITextLayoutWorker.class, 64 / threads, threads).run());
+            throughput.get(PDFBoxWorker.class).add(new Runner(PDFBoxWorker.class, 64 / threads, threads).run());
+            throughput.get(PDFBoxLayoutWorker.class).add(new Runner(PDFBoxLayoutWorker.class, 3, threads).run()); // too slow, just loop 3 times
+            throughput.get(FlyingSaucerWorker.class).add(new Runner(FlyingSaucerWorker.class, 3, threads).run()); // too slow, just loop 3 times
+        }
+
+        System.out.println("================== throughput summary ==================");
+        for (Class clazz : throughput.keySet()) {
+            System.out.println(clazz + ":" + throughput.get(clazz));
         }
 
     }
