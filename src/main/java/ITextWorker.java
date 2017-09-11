@@ -1,4 +1,3 @@
-
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Rectangle;
@@ -14,8 +13,9 @@ import com.itextpdf.tool.xml.pipeline.css.CssResolverPipeline;
 import com.itextpdf.tool.xml.pipeline.end.ElementHandlerPipeline;
 import com.itextpdf.tool.xml.pipeline.html.HtmlPipeline;
 import com.itextpdf.tool.xml.pipeline.html.HtmlPipelineContext;
-
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.concurrent.CountDownLatch;
@@ -28,19 +28,20 @@ public class ITextWorker extends BaseWorker {
         super(loop, latch);
     }
 
-    public void doTest() {
-        try {
-            Document document = new Document(new Rectangle(595.32F, 841.92F), 90.0F, 32.7F, 160.4F, 50.7F);
-            PdfWriter writer = PdfWriter.getInstance(document, new ByteArrayOutputStream());
-            document.open();
-            for (Element e : elements) {
-                document.add(e);
-            }
-            document.close();
-            writer.close();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+    public void doTest(String optionalPath) throws Exception {
+        Document document = new Document(new Rectangle(595.32F, 841.92F), 90.0F, 32.7F, 160.4F, 50.7F);
+        PdfWriter writer;
+        if (optionalPath != null) {
+            writer = PdfWriter.getInstance(document, new BufferedOutputStream(new FileOutputStream(optionalPath)));
+        } else {
+            writer = PdfWriter.getInstance(document, new ByteArrayOutputStream());
         }
+        document.open();
+        for (Element e : elements) {
+            document.add(e);
+        }
+        document.close();
+        writer.close();
     }
 
     private static ElementList parseHtml(String content, TagProcessorFactory tagProcessors) {
@@ -67,6 +68,10 @@ public class ITextWorker extends BaseWorker {
             throw new Error(e);
         }
         return elements;
+    }
+
+    public static void main(String[] args) throws Exception {
+        new ITextWorker(1, null).doTest("target/test_itext.pdf");
     }
 
 }

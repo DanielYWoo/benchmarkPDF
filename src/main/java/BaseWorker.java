@@ -10,13 +10,17 @@ public abstract class BaseWorker extends Thread {
         this.latch = latch;
     }
 
-    abstract void doTest();
+    abstract void doTest(String optionalPath) throws Exception;
 
     @Override
     public void run() {
         for (int i  = 0; i < loop; i++) {
             System.out.print(".");
-            doTest();
+            try {
+                doTest(null);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
         latch.countDown();
     }

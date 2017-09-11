@@ -20,6 +20,10 @@ public class Runner {
                 workers[i] = new ITextWorker(loops, latch);
             } else if (clazz == FlyingSaucerWorker.class) {
                 workers[i] = new FlyingSaucerWorker(loops, latch);
+            } else if (clazz == PDFBoxWorker.class) {
+                workers[i] = new PDFBoxWorker(loops, latch);
+            } else if (clazz == PDFBoxLayoutWorker.class) {
+                workers[i] = new PDFBoxLayoutWorker(loops, latch);
             } else {
                 throw new IllegalArgumentException("Not supported worker:" + clazz);
             }
@@ -48,13 +52,18 @@ public class Runner {
     public static void main(String[] args) throws Exception {
         // warm up
         System.out.println("================== Warm up ===========================");
-        new Runner(ITextWorker.class, 1, 1).run();
-        new Runner(FlyingSaucerWorker.class, 1, 1).run();
+        new ITextWorker(1, null).doTest(null);
+        new PDFBoxWorker(1, null).doTest(null);
+        new PDFBoxLayoutWorker(1, null).doTest(null);
+        new FlyingSaucerWorker(1, null).doTest(null);
+
 
         for (int threads = 1; threads < 32; threads *= 2) {
             // start
             System.out.println("================== Test with " + threads + "threads ==================");
             new Runner(ITextWorker.class, 100, threads).run();
+            new Runner(PDFBoxWorker.class, 20, threads).run();
+            new Runner(PDFBoxLayoutWorker.class, 20, threads).run(); // too slow, just loop 20 times
             new Runner(FlyingSaucerWorker.class, 20, threads).run(); // too slow, just loop 20 times
         }
 
