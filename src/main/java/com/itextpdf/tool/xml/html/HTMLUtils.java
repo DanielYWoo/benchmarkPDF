@@ -46,7 +46,6 @@ package com.itextpdf.tool.xml.html;
 import com.itextpdf.text.Chunk;
 
 import com.itextpdf.text.pdf.BaseFont;
-import com.sun.javaws.exceptions.ErrorCodeResponseException;
 import java.util.ArrayList;
 import java.util.List;
 
