@@ -1,16 +1,13 @@
-import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
 import com.lowagie.text.Font;
 import com.lowagie.text.FontFactory;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
-import com.lowagie.text.html.simpleparser.HTMLWorker;
 import com.lowagie.text.pdf.BaseFont;
 import com.lowagie.text.pdf.PdfWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
-import java.io.StringReader;
 import java.util.concurrent.CountDownLatch;
 
 public class IText2LayoutWorker extends BaseWorker {
@@ -50,7 +47,7 @@ public class IText2LayoutWorker extends BaseWorker {
 
 
     public static void main(String[] args) throws Exception {
-        new IText2LayoutWorker(1, null).doTest("/Users/danielwu/Documents/test.pdf");
+        new IText2LayoutWorker(1, null).doTest("target/test_itext2_layout.pdf");
     }
 
 }

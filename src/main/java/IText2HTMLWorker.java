@@ -35,10 +35,6 @@ public class IText2HTMLWorker extends BaseWorker {
         document.open();
         worker.parse(new StringReader(HTMLUtil.getLongContent()));
 
-//        List<Element> objects = HTMLWorker.parseToList(new StringReader(HTMLUtil.getLongContent()), null, null);
-//        for (Element element : objects) {
-//            document.add(element);
-//        }
         worker.close();
         document.close();
         w.close();
