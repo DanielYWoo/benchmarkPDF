@@ -15,6 +15,9 @@ public class FlyingSaucerWorker extends BaseWorker {
 
     void doTest(String optionalPath) throws Exception {
         renderer.setDocumentFromString(HTMLUtil.getLongContent());
+        renderer.getFontResolver().addFont("fonts/ARIALUNI.TTF", false);
+        renderer.getFontResolver().addFont("fonts/simkai.ttf", false);
+        renderer.getFontResolver().addFont("fonts/SIMSUN.TTC", false);
         renderer.layout();
         OutputStream out;
         if (optionalPath != null) {

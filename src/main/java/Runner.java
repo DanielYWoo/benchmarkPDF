@@ -99,8 +99,8 @@ public class Runner {
         for (int threads = initialThreads; threads <= 64; threads *= 2) {
             // start
             System.out.println("================== Test with " + threads + " threads ==================");
-//            throughput.get(WkhtmltopdfWorker.class).add( new Runner(WkhtmltopdfWorker.class, defaultLoops / threads, threads).run());
-//            throughput.get(IText5HTMLWorker.class).add( new Runner(IText5HTMLWorker.class, defaultLoops / threads, threads).run());
+            throughput.get(WkhtmltopdfWorker.class).add( new Runner(WkhtmltopdfWorker.class, defaultLoops / threads, threads).run());
+            throughput.get(IText5HTMLWorker.class).add( new Runner(IText5HTMLWorker.class, defaultLoops / threads, threads).run());
 //            throughput.get(IText2HTMLWorker.class).add( new Runner(IText2HTMLWorker.class, defaultLoops / threads, threads).run());
 //            throughput.get(IText5LayoutWorker.class).add(new Runner(IText5LayoutWorker.class, defaultLoops / threads, threads).run());
 //            throughput.get(PDFBoxWorker.class).add(new Runner(PDFBoxWorker.class, defaultLoops / threads, threads).run());

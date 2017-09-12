@@ -1,6 +1,5 @@
 import com.github.jhonnymertz.wkhtmltopdf.wrapper.Pdf;
 import com.github.jhonnymertz.wkhtmltopdf.wrapper.params.Param;
-
 import java.io.FileOutputStream;
 import java.util.concurrent.CountDownLatch;
 
