@@ -1,6 +1,8 @@
 import com.itextpdf.text.Document;
+import com.itextpdf.text.Font;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfWriter;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
@@ -22,8 +24,10 @@ public class IText5LayoutWorker extends BaseWorker {
             writer = PdfWriter.getInstance(document, new ByteArrayOutputStream());
         }
         document.open();
+        BaseFont baseFontChinese = BaseFont.createFont("STSong-Light", "UniGB-UCS2-H", BaseFont.NOT_EMBEDDED);
+        Font fontChinese =  new  Font(baseFontChinese , 12 , Font.NORMAL);
         for (String text : HTMLUtil.getLongContentElements()) {
-            Paragraph e = new Paragraph(text);
+            Paragraph e = new Paragraph(text, fontChinese);
             document.add(e);
         }
         document.close();
@@ -31,7 +35,7 @@ public class IText5LayoutWorker extends BaseWorker {
     }
 
     public static void main(String[] args) throws Exception {
-        new IText5LayoutWorker(1, null).doTest("target/test_itext_layout.pdf");
+        new IText5LayoutWorker(1, null).doTest("target/itext5_layout.pdf");
     }
 
 }
