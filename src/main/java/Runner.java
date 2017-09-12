@@ -84,6 +84,7 @@ public class Runner {
         new WkhtmltopdfWorker(1, null).doTest("target/wk_html.pdf");
         new IText5HTMLWorker(1, null).doTest("target/itext5_html.pdf");
         new IText2HTMLWorker(1, null).doTest("target/itext2_html.pdf");
+        new IText2LayoutWorker(1, null).doTest("target/itext2_html.pdf");
         new IText5LayoutWorker(1, null).doTest("target/itext5_layout.pdf");
         new NodeHTMLWorker(1, null).doTest("target/node_html.pdf");
         new FlyingSaucerWorker(1, null).doTest("target/flying_saucer.pdf");
@@ -92,11 +93,12 @@ public class Runner {
 //        new PDFBoxLayoutWorker(1, null).doTest("target/pdfbox_layout.pdf");
 
         Map<Class, List<Double>> throughput = new HashMap<>();
-        throughput.put(WkhtmltopdfWorker.class, new ArrayList<>());
+        throughput.put(IText5LayoutWorker.class, new ArrayList<>());
+        throughput.put(IText2LayoutWorker.class, new ArrayList<>());
         throughput.put(IText5HTMLWorker.class, new ArrayList<>());
         throughput.put(IText2HTMLWorker.class, new ArrayList<>());
-        throughput.put(IText5LayoutWorker.class, new ArrayList<>());
         throughput.put(NodeHTMLWorker.class, new ArrayList<>());
+        throughput.put(WkhtmltopdfWorker.class, new ArrayList<>());
         throughput.put(FlyingSaucerWorker.class, new ArrayList<>());
 //        throughput.put(IText7HTMLWorker.class, new ArrayList<>());
 //        throughput.put(PDFBoxWorker.class, new ArrayList<>());
@@ -105,11 +107,12 @@ public class Runner {
         for (int threads = initialThreads; threads <= 64; threads *= 2) {
             // start
             System.out.println("================== Test with " + threads + " threads ==================");
-            throughput.get(WkhtmltopdfWorker.class).add( new Runner(WkhtmltopdfWorker.class, defaultLoops / threads, threads).run());
+            throughput.get(IText5LayoutWorker.class).add(new Runner(IText5LayoutWorker.class, defaultLoops / threads, threads).run());
+            throughput.get(IText2LayoutWorker.class).add( new Runner(IText2LayoutWorker.class, defaultLoops / threads, threads).run()); // you need iTextAsian 2.1.7 in classpath
             throughput.get(IText5HTMLWorker.class).add( new Runner(IText5HTMLWorker.class, defaultLoops / threads, threads).run());
             throughput.get(IText2HTMLWorker.class).add( new Runner(IText2HTMLWorker.class, defaultLoops / threads, threads).run()); // you need iTextAsian 2.1.7 in classpath
-            throughput.get(IText5LayoutWorker.class).add(new Runner(IText5LayoutWorker.class, defaultLoops / threads, threads).run());
             throughput.get(NodeHTMLWorker.class).add(new Runner(NodeHTMLWorker.class, defaultLoops / threads, threads).run());
+            throughput.get(WkhtmltopdfWorker.class).add( new Runner(WkhtmltopdfWorker.class, 20, threads).run());
             throughput.get(FlyingSaucerWorker.class).add(new Runner(FlyingSaucerWorker.class, 10, threads).run()); // too slow
 //            throughput.get(IText7HTMLWorker.class).add( new Runner(IText7HTMLWorker.class, defaultLoops / threads, threads).run());
 //            throughput.get(PDFBoxWorker.class).add(new Runner(PDFBoxWorker.class, defaultLoops / threads, threads).run());
