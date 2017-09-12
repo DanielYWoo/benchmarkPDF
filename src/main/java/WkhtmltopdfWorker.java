@@ -1,4 +1,5 @@
 import com.github.jhonnymertz.wkhtmltopdf.wrapper.Pdf;
+import com.github.jhonnymertz.wkhtmltopdf.wrapper.params.Param;
 
 import java.util.concurrent.CountDownLatch;
 
@@ -14,7 +15,8 @@ public class WkhtmltopdfWorker extends BaseWorker {
     void doTest(String optionalPath) throws Exception {
         Pdf pdf = new Pdf();
         pdf.addPageFromString(html);
-        pdf.addToc();
+        pdf.addParam(new Param("--no-outline"));
+        pdf.addParam(new Param("--lowquality"));
         if (optionalPath != null) {
             pdf.saveAs(optionalPath);
         }
