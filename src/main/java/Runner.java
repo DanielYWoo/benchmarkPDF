@@ -104,8 +104,13 @@ public class Runner {
 //            throughput.get(IText2HTMLWorker.class).add( new Runner(IText2HTMLWorker.class, defaultLoops / threads, threads).run());
 //            throughput.get(IText5LayoutWorker.class).add(new Runner(IText5LayoutWorker.class, defaultLoops / threads, threads).run());
 //            throughput.get(PDFBoxWorker.class).add(new Runner(PDFBoxWorker.class, defaultLoops / threads, threads).run());
+            throughput.get(IText5HTMLWorker.class).add( new Runner(IText5HTMLWorker.class, 64 / threads, threads).run());
+//            throughput.get(IText2HTMLWorker.class).add( new Runner(IText2HTMLWorker.class, 512 / threads, threads).run());
+//            throughput.get(IText5LayoutWorker.class).add(new Runner(IText5LayoutWorker.class, 64 / threads, threads).run());
+//            throughput.get(WkhtmltopdfWorker.class).add( new Runner(WkhtmltopdfWorker.class, 64 / threads, threads).run());
+//            throughput.get(PDFBoxWorker.class).add(new Runner(PDFBoxWorker.class, 1024 / threads, threads).run());
 //            throughput.get(PDFBoxLayoutWorker.class).add(new Runner(PDFBoxLayoutWorker.class, 10, threads).run()); // too slow
-//            throughput.get(IText7HTMLWorker.class).add( new Runner(IText7HTMLWorker.class, 100 / threads, threads).run()); // too slow
+            throughput.get(IText7HTMLWorker.class).add( new Runner(IText7HTMLWorker.class, 64 / threads, threads).run()); // too slow
 //            throughput.get(FlyingSaucerWorker.class).add(new Runner(FlyingSaucerWorker.class, 10, threads).run()); // too slow
         }
 

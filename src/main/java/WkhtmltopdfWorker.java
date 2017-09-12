@@ -22,6 +22,9 @@ public class WkhtmltopdfWorker extends BaseWorker {
             try (FileOutputStream out = new FileOutputStream(optionalPath)) {
                 out.write(bytes);
             }
+            pdf.saveAs(optionalPath);
+        } else {
+            pdf.getPDF();
         }
     }
 
