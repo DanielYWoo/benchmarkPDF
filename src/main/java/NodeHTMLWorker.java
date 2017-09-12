@@ -13,7 +13,7 @@ public class NodeHTMLWorker extends BaseWorker {
         optionalPath = "target/node_html.pdf";
         String cmd = "html-pdf " + htmlPath + " " + optionalPath;
         Process process = Runtime.getRuntime().exec(cmd);
-//        process.waitFor();
+        process.waitFor();
     }
 
     public static void main(String[] args) throws Exception {
