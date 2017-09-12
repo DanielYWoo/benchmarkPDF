@@ -15,7 +15,7 @@ public abstract class BaseWorker extends Thread {
     @Override
     public void run() {
         for (int i  = 0; i < loop; i++) {
-            System.out.print(".");
+//            System.out.print(".");
             try {
                 doTest(null);
             } catch (Exception e) {
