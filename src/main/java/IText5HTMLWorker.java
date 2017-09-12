@@ -25,7 +25,7 @@ public class IText5HTMLWorker extends BaseWorker {
         super(loop, latch);
     }
     static {
-        FontFactory.registerDirectory(IText5HTMLWorker.class.getClassLoader().getResource("fonts").getPath());
+//        FontFactory.registerDirectory(IText5HTMLWorker.class.getClassLoader().getResource("fonts").getPath());
     }
 
     public void doTest(String optionalPath) throws Exception {
