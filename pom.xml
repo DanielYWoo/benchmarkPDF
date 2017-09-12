@@ -102,6 +102,7 @@
        <artifactId>java-wkhtmltopdf-wrapper</artifactId>
        <version>1.0.2-RELEASE</version>
     </dependency>
+
   </dependencies>
 
   <build>

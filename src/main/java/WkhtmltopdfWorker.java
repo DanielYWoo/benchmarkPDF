@@ -16,15 +16,14 @@ public class WkhtmltopdfWorker extends BaseWorker {
         Pdf pdf = new Pdf();
         pdf.addParam(new Param("--no-outline"));
         pdf.addParam(new Param("--lowquality"));
+//        pdf.addParam(new Param("--dpi" , "90"));
         pdf.addPageFromString(html);
         byte[] bytes = pdf.getPDF();
         if (optionalPath != null) {
             try (FileOutputStream out = new FileOutputStream(optionalPath)) {
                 out.write(bytes);
             }
-            pdf.saveAs(optionalPath);
-        } else {
-            pdf.getPDF();
+//            pdf.saveAs(optionalPath);
         }
     }
 

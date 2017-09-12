@@ -93,6 +93,7 @@ public class Runner {
         throughput.put(IText2HTMLWorker.class, new ArrayList<>());
         throughput.put(IText5LayoutWorker.class, new ArrayList<>());
         throughput.put(FlyingSaucerWorker.class, new ArrayList<>());
+        throughput.put(IText7HTMLWorker.class, new ArrayList<>());
 //        throughput.put(PDFBoxWorker.class, new ArrayList<>());
 //        throughput.put(PDFBoxLayoutWorker.class, new ArrayList<>());
 
@@ -104,10 +105,9 @@ public class Runner {
             throughput.get(IText5LayoutWorker.class).add(new Runner(IText5LayoutWorker.class, defaultLoops / threads, threads).run());
             throughput.get(IText7HTMLWorker.class).add( new Runner(IText7HTMLWorker.class, 64 / threads, threads).run()); // too slow
             throughput.get(FlyingSaucerWorker.class).add(new Runner(FlyingSaucerWorker.class, 10, threads).run()); // too slow
-//            throughput.get(IText2HTMLWorker.class).add( new Runner(IText2HTMLWorker.class, defaultLoops / threads, threads).run());
+            throughput.get(IText2HTMLWorker.class).add( new Runner(IText2HTMLWorker.class, defaultLoops / threads, threads).run()); // you need iTextAsian 2.1.7 in classpath
 //            throughput.get(PDFBoxWorker.class).add(new Runner(PDFBoxWorker.class, defaultLoops / threads, threads).run());
 //            throughput.get(PDFBoxLayoutWorker.class).add(new Runner(PDFBoxLayoutWorker.class, 10, threads).run()); // too slow
-//            throughput.get(IText2HTMLWorker.class).add( new Runner(IText2HTMLWorker.class, 512 / threads, threads).run());
         }
 
         System.out.println("================== throughput summary ==================");
