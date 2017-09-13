@@ -3,8 +3,7 @@ import java.util.concurrent.CountDownLatch;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.font.PDType0Font;
 
 public class PDFBoxWorker extends BaseWorker {
     static {
@@ -21,13 +20,17 @@ public class PDFBoxWorker extends BaseWorker {
         try (PDDocument doc = new PDDocument()) {
             PDPage page = new PDPage();
             doc.addPage(page);
-            PDFont font = PDType1Font.HELVETICA_BOLD;
+            PDType0Font font = PDType0Font.load(doc, this.getClass().getClassLoader().getResourceAsStream("fonts/ARIALUNI.TTF"));
             try (PDPageContentStream contents = new PDPageContentStream(doc, page)) {
-                contents.beginText();
-                contents.setFont(font, 12);
-                contents.newLineAtOffset(100, 700);
-                contents.showText(HTMLUtil.getLongContent());
-                contents.endText();
+                int i = 100;
+                for (String element : HTMLUtil.getLongContentElements()) {
+                    contents.beginText();
+                    contents.setFont(font, 10);
+                    contents.newLineAtOffset(100, i);
+                    contents.showText(element.replace("\r", "").replace("\n", ""));
+                    contents.endText();
+                    i += 30;
+                }
             }
             if (optionalPath != null) {
                 doc.save(optionalPath);
