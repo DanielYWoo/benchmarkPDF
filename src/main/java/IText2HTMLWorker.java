@@ -1,16 +1,15 @@
 import com.lowagie.text.Document;
-import com.lowagie.text.Element;
 import com.lowagie.text.FontFactory;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.html.HtmlTags;
 import com.lowagie.text.html.simpleparser.HTMLWorker;
 import com.lowagie.text.html.simpleparser.StyleSheet;
 import com.lowagie.text.pdf.PdfWriter;
+
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.StringReader;
-import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 public class IText2HTMLWorker extends BaseWorker {

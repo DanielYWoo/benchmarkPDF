@@ -1,7 +1,7 @@
 import com.github.jhonnymertz.wkhtmltopdf.wrapper.Pdf;
 import com.github.jhonnymertz.wkhtmltopdf.wrapper.params.Param;
+
 import java.io.FileOutputStream;
-import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 
 public class WkhtmltopdfWorker extends BaseWorker {
