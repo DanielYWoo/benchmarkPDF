@@ -11,15 +11,18 @@ import org.xhtmlrenderer.pdf.ITextRenderer;
 
 public class FlyingSaucerWorker extends BaseWorker {
 
-    private ITextRenderer renderer = new ITextRenderer();
+    private final ITextRenderer renderer;
 
     public FlyingSaucerWorker(int loop, CountDownLatch latch) throws Exception {
         super(loop, latch);
+        long t1 = System.currentTimeMillis();
+        renderer = new ITextRenderer();
         ITextFontResolver fontResolver = renderer.getFontResolver();
         fontResolver.addFont("fonts/ARIALUNI.TTF", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
         fontResolver.addFont("fonts/SIMSUN.TTC", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
         fontResolver.addFont("fonts/times.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
         fontResolver.addFont("fonts/simkai.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+        System.out.println("flying saucer init:" + (System.currentTimeMillis() - t1));
     }
 
     void doTest(String optionalPath) throws Exception {
