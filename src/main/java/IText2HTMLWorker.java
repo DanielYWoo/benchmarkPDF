@@ -1,19 +1,23 @@
 import com.lowagie.text.Document;
 import com.lowagie.text.FontFactory;
+import com.lowagie.text.FontFactoryImp;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.html.HtmlTags;
 import com.lowagie.text.html.simpleparser.HTMLWorker;
 import com.lowagie.text.html.simpleparser.StyleSheet;
 import com.lowagie.text.pdf.PdfWriter;
 
+import com.lowagie.text.xml.simpleparser.SimpleXMLParser;
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.StringReader;
+import java.util.HashMap;
 import java.util.concurrent.CountDownLatch;
 
 public class IText2HTMLWorker extends BaseWorker {
 
+    // chinese fonts are not supported
     static {
         FontFactory.registerDirectory(IText2HTMLWorker.class.getClassLoader().getResource("fonts").getPath());
     }
@@ -40,10 +44,12 @@ public class IText2HTMLWorker extends BaseWorker {
         Document document = new Document(PageSize.A4, 30, 30, 30, 30);
         PdfWriter w = PdfWriter.getInstance(document, outputStream);
         HTMLWorker worker = new HTMLWorker(document);
-        worker.setStyleSheet(stylesheet);
+//        HashMap interfaceProps = new HashMap();
+//        interfaceProps.put("font_factory", new FontFactoryImp());
+//        worker.setInterfaceProps(interfaceProps);
+//        worker.setStyleSheet(stylesheet);
         document.open();
         worker.parse(new StringReader(HTMLUtil.getLongContent()));
-
         worker.close();
         document.close();
         w.close();

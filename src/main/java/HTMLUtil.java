@@ -13,7 +13,7 @@ public class HTMLUtil {
         try {
             StringBuilder sb = new StringBuilder();
             BufferedReader reader = new BufferedReader(new InputStreamReader(
-                    HTMLUtil.class.getClassLoader().getResourceAsStream("sample.html"), "utf8"));
+                    HTMLUtil.class.getClassLoader().getResourceAsStream("sample_no_nested.html"), "utf8"));
             String line;
             while ((line = reader.readLine()) != null) {
                 sb.append(line);
